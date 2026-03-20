@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fingerboards Formosa | Tienda y Comunidad Finger en el Norte</title>
+  
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:#0f0f0f; color:#e0e0e0; line-height:1.6;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+    }
+    body.loaded { visibility: visible; opacity: 1; transition: opacity 0.8s ease; }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+
+    .skate-wheel {
+      width: 120px;
+      height: 120px;
+      border: 12px solid #ff3366;
+      border-top: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+      box-shadow: 0 0 20px rgba(255,51,102,0.6);
+      position: relative;
+    }
+    .skate-wheel::before {
+      content: "";
+      position: absolute;
+      inset: 15px;
+      border: 8px solid #ffcc00;
+      border-radius: 50%;
+      animation: spin-reverse 2s linear infinite;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+
+    header {
+      background: linear-gradient(to right, #1a1a1a, #000);
+      padding:1.5rem 5%; border-bottom:3px solid #ff3366;
+      text-align:center; position:sticky; top:0; z-index:100;
+    }
+    .glitch {
+      position: relative;
+      font-size:2.8rem; color:#ff3366;
+      text-shadow:0 0 15px rgba(255,51,102,0.7);
+      animation: glitch-skew 4s infinite linear alternate-reverse;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text); position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.8;
+    }
+    .glitch::before { left:2px; text-shadow:-2px 0 #00ffff; clip:rect(0,900px,0,0); animation:glitch-anim 2s infinite linear alternate-reverse; }
+    .glitch::after { left:-2px; text-shadow:2px 0 #ff00ff; clip:rect(0,900px,0,0); animation:glitch-anim2 3s infinite linear alternate-reverse; }
+    @keyframes glitch-anim { 0% {clip:rect(42px,9999px,44px,0); transform:skew(0.6deg);} 5%{clip:rect(17px,9999px,59px,0);transform:skew(0.9deg);} 100%{clip:rect(30px,9999px,92px,0);transform:skew(0.4deg);} }
+    @keyframes glitch-anim2 { 0% {clip:rect(65px,9999px,100px,0); transform:skew(0.2deg);} 5%{clip:rect(76px,9999px,3px,0);transform:skew(1deg);} 100%{clip:rect(5px,9999px,66px,0);transform:skew(0.1deg);} }
+    @keyframes glitch-skew { 0%,100%{transform:skew(0deg);} 10%,90%{transform:skew(1deg);} }
+
+    header p { color:#aaa; margin-top:0.4rem; font-size:1.1rem; }
+    nav a { color:#ffcc00; text-decoration:none; margin:0 1.2rem; font-weight:bold; transition:color 0.3s; }
+    nav a:hover { color:#ff3366; }
+    .hero { background:url('https://images.unsplash.com/photo-1611348586808-2c5e4e6e8e6f?w=1200&q=80') center/cover no-repeat; height:60vh; min-height:400px; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; }
+    .hero::before { content:""; position:absolute; inset:0; background:rgba(0,0,0,0.65); }
+    .hero-content { position:relative; z-index:2; }
+    .hero h2 { font-size:3.5rem; margin-bottom:1rem; color:#fff; text-shadow:3px 3px 10px #000; }
+    .hero p { font-size:1.4rem; max-width:700px; margin:0 auto 2rem; }
+    .btn { display:inline-block; background:#ff3366; color:white; padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none; font-weight:bold; transition:all 0.3s; }
+    .btn:hover { background:#ff1a57; transform:translateY(-3px); box-shadow:0 8px 20px rgba(255,51,102,0.4); }
+    main { padding:4rem 5%; max-width:1200px; margin:0 auto; }
+    h3 { color:#ffcc00; margin-bottom:1.5rem; font-size:2.1rem; text-align:center; }
+    .productos-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:1.8rem; margin:2rem 0; }
+    .card { background:#1a1a1a; border-radius:12px; overflow:hidden; transition:transform 0.3s, box-shadow 0.3s; border:1px solid #333; }
+    .card:hover { transform:translateY(-10px); box-shadow:0 15px 35px rgba(255,51,102,0.2); }
+    .card img { width:100%; height:220px; object-fit:cover; }
+    .card-info { padding:1.2rem; text-align:center; }
+    .card h4 { color:#ffcc00; margin-bottom:0.6rem; }
+    .stock-warning { color:#ff4444; font-weight:bold; margin-top:0.5rem; font-size:1rem; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+    #trucos { padding:4rem 5%; background:#111; }
+    .trucos-menu { text-align:center; margin-bottom:2rem; }
+    .trucos-menu button { background:#222; color:#ffcc00; border:none; padding:0.8rem 1.5rem; margin:0.5rem; border-radius:8px; cursor:pointer; font-weight:bold; transition:all 0.3s; }
+    .trucos-menu button:hover, .trucos-menu button.active { background:#ff3366; color:white; }
+    .truco-content { display:none; text-align:center; }
+    .truco-content.active { display:block; }
+    .video-wrapper { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:800px; margin:2rem auto; background:#000; }
+    .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .truco-desc { max-width:700px; margin:1rem auto; font-size:1.1rem; }
+
+    /* Nueva sección Contacto */
+    #contacto { padding:4rem 5%; background:#000; text-align:center; border-top:2px solid #333; }
+    .contact-btn { 
+      display: inline-block; 
+      background:#25D366; /* verde WhatsApp */ 
+      color:white; 
+      padding:1.2rem 3rem; 
+      border-radius:50px; 
+      text-decoration:none; 
+      font-weight:bold; 
+      font-size:1.3rem; 
+      margin:1.5rem 0; 
+      transition:all 0.3s; 
+      box-shadow:0 8px 20px rgba(37,213,102,0.4);
+    }
+    .contact-btn:hover { background:#20b858; transform:translateY(-5px); box-shadow:0 15px 30px rgba(37,213,102,0.5); }
+
+    footer { background:#000; padding:2rem; text-align:center; border-top:2px solid #333; }
+    @media (max-width:600px) { .glitch {font-size:2.2rem;} .hero h2 {font-size:2.6rem;} nav a {margin:0 0.8rem; font-size:0.95rem;} .contact-btn {padding:1rem 2rem; font-size:1.1rem;} }
+  </style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="skate-wheel"></div>
+  </div>
+
+  <header>
+    <h1 class="glitch" data-text="Fingerboards Formosa">Fingerboards Formosa</h1>
+    <p>La comunidad más callejera del norte 🇦🇷</p>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#productos">Tablas</a>
+      <a href="#trucos">Trucos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <h2>¡Fingerboard al palo!</h2>
+      <p>Tablas pro, repuestos, stickers y la mejor onda fingerstyle de Formosa y alrededores.</p>
+      <a href="#productos" class="btn">Ver Tablas</a>
+    </div>
+  </section>
+
+  <main>
+    <h3 id="productos">Nuestras Tablas Destacadas</h3>
+    <div class="productos-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1611348586808-2c5e4e6e8e6f?w=400" alt="Fingerboard negro">
+        <div class="card-info">
+          <h4>Black Tech Deck Pro</h4>
+          <p>$ 18.000</p>
+          <div class="stock-warning">¡Solo quedan 3 unidades!</div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400" alt="Fingerboard color madera">
+        <div class="card-info">
+          <h4>Wood Series 2025</h4>
+          <p>$ 22.500</p>
+          <div class="stock-warning">¡Solo quedan 2 unidades!</div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400" alt="Fingerboard con grip">
+        <div class="card-info">
+          <h4>Custom Grip Pink</h4>
+          <p>$ 26.000</p>
+          <div class="stock-warning">¡Solo quedan 4 unidades!</div>
+        </div>
+      </div>
+    </div>
+
+    <section id="trucos">
+      <h3>Aprendé Trucos con la Banda de Formosa</h3>
+      <p style="text-align:center; margin-bottom:2rem;">Elegí el truco que querés aprender y mirá el tutorial paso a paso</p>
+      <div class="trucos-menu">
+        <button data-truco="ollie">Ollie</button>
+        <button data-truco="kickflip">Kickflip</button>
+        <button data-truco="heelflip" class="active">Heelflip</button>
+        <button data-truco="otro">Otro truco</button>
+      </div>
+      <div id="ollie" class="truco-content">
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/JwhIy9RZhlg" title="Ollie Tutorial" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="truco-desc">
+          <h4>Cómo Hacer un Ollie en Fingerboard</h4>
+          <p>Tutorial básico de Burbuja Psicopata: posición, pop y aterrizaje limpio. ¡Dale play!</p>
+        </div>
+      </div>
+      <div id="kickflip" class="truco-content">
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/azXDzIRHMok" title="Kickflip Tutorial" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="truco-desc">
+          <h4>Cómo Hacer un Kickflip</h4>
+          <p>Flick con índice, control del flip. ¡Practicá después del ollie!</p>
+        </div>
+      </div>
+      <div id="heelflip" class="truco-content active">
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/-wRo2MVHF5k" title="Heelflip Tutorial" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="truco-desc">
+          <h4>Cómo Hacer un Heelflip</h4>
+          <p>Flick hacia el talón. ¡Subí tu clip a IG cuando lo saques!</p>
+        </div>
+      </div>
+      <div id="otro" class="truco-content">
+        <h4>Otro truco</h4>
+        <p>Decime cuál querés (pop shuvit, impossible...) y lo agregamos.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Sección Contacto -->
+  <section id="contacto">
+    <h3>Contacto</h3>
+    <p style="font-size:1.3rem; margin:1rem 0;">¿Querés info de tablas, armar un custom o comprar? Escribime directo por WhatsApp. ¡Te respondo rápido!</p>
+    <a href="https://wa.me/543705202418?text=Hola!%20Vi%20tu%20p%C3%A1gina%20de%20Fingerboards%20Formosa%20y%20quiero%20info%20/%20comprar..." class="contact-btn" target="_blank">
+      Escribime por WhatsApp
+    </a>
+    <p style="margin-top:2rem; color:#aaa;">Número: +54 3705 202418</p>
+  </section>
+
+  <footer>
+    <p>© 2026 Fingerboards Formosa • Hecho con ❤️ para la escena finger</p>
+    <p>IG: @fingerboardsformosa • WhatsApp: +54 3705 202418</p>
+  </footer>
+
+  <script>
+    // Loader: 2 segundos fijos
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+      document.body.classList.add('loaded');
+    }, 2000);
+
+    // Tabs trucos
+    const buttons = document.querySelectorAll('.trucos-menu button');
+    const contents = document.querySelectorAll('.truco-content');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        contents.forEach(cont => cont.classList.remove('active'));
+        button.classList.add('active');
+        const trucoId = button.getAttribute('data-truco');
+        document.getElementById(trucoId).classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
