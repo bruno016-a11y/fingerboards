@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fingerboards Formosa | Tienda y Comunidad Finger en el Norte</title>
+  <title>APES | Fingerboards Formosa</title>
   
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -16,6 +16,7 @@
     }
     body.loaded { visibility: visible; opacity: 1; transition: opacity 0.8s ease; }
 
+    /* Loader */
     #loader {
       position: fixed;
       inset: 0;
@@ -48,7 +49,6 @@
       border-radius: 50%;
       animation: spin-reverse 2s linear infinite;
     }
-
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
 
@@ -75,63 +75,101 @@
     header p { color:#aaa; margin-top:0.4rem; font-size:1.1rem; }
     nav a { color:#ffcc00; text-decoration:none; margin:0 1.2rem; font-weight:bold; transition:color 0.3s; }
     nav a:hover { color:#ff3366; }
-    .hero { background:url('https://images.unsplash.com/photo-1611348586808-2c5e4e6e8e6f?w=1200&q=80') center/cover no-repeat; height:60vh; min-height:400px; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; }
+
+    .hero {
+      background:url('https://images.unsplash.com/photo-1611348586808-2c5e4e6e8e6f?w=1200&q=80') center/cover no-repeat;
+      height:60vh; min-height:400px; display:flex; align-items:center; justify-content:center; text-align:center; position:relative;
+    }
     .hero::before { content:""; position:absolute; inset:0; background:rgba(0,0,0,0.65); }
     .hero-content { position:relative; z-index:2; }
     .hero h2 { font-size:3.5rem; margin-bottom:1rem; color:#fff; text-shadow:3px 3px 10px #000; }
     .hero p { font-size:1.4rem; max-width:700px; margin:0 auto 2rem; }
-    .btn { display:inline-block; background:#ff3366; color:white; padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none; font-weight:bold; transition:all 0.3s; }
+
+    .btn {
+      display:inline-block; background:#ff3366; color:white;
+      padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none;
+      font-weight:bold; transition:all 0.3s;
+    }
     .btn:hover { background:#ff1a57; transform:translateY(-3px); box-shadow:0 8px 20px rgba(255,51,102,0.4); }
+
     main { padding:4rem 5%; max-width:1200px; margin:0 auto; }
     h3 { color:#ffcc00; margin-bottom:1.5rem; font-size:2.1rem; text-align:center; }
-    .productos-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:1.8rem; margin:2rem 0; }
-    .card { background:#1a1a1a; border-radius:12px; overflow:hidden; transition:transform 0.3s, box-shadow 0.3s; border:1px solid #333; }
+
+    .productos-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+      gap:1.8rem; margin:2rem 0;
+    }
+    .card {
+      background:#1a1a1a; border-radius:12px; overflow:hidden;
+      transition:transform 0.3s, box-shadow 0.3s; border:1px solid #333;
+    }
     .card:hover { transform:translateY(-10px); box-shadow:0 15px 35px rgba(255,51,102,0.2); }
     .card img { width:100%; height:220px; object-fit:cover; }
     .card-info { padding:1.2rem; text-align:center; }
     .card h4 { color:#ffcc00; margin-bottom:0.6rem; }
-    .stock-warning { color:#ff4444; font-weight:bold; margin-top:0.5rem; font-size:1rem; animation:pulse 2s infinite; }
+    .stock-warning {
+      color:#ff4444; font-weight:bold; margin-top:0.5rem;
+      font-size:1rem; animation:pulse 2s infinite;
+    }
     @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+
     #trucos { padding:4rem 5%; background:#111; }
     .trucos-menu { text-align:center; margin-bottom:2rem; }
-    .trucos-menu button { background:#222; color:#ffcc00; border:none; padding:0.8rem 1.5rem; margin:0.5rem; border-radius:8px; cursor:pointer; font-weight:bold; transition:all 0.3s; }
-    .trucos-menu button:hover, .trucos-menu button.active { background:#ff3366; color:white; }
+    .trucos-menu button {
+      background:#222; color:#ffcc00; border:none; padding:0.8rem 1.5rem;
+      margin:0.5rem; border-radius:8px; cursor:pointer; font-weight:bold;
+      transition:all 0.3s;
+    }
+    .trucos-menu button:hover, .trucos-menu button.active {
+      background:#ff3366; color:white;
+    }
     .truco-content { display:none; text-align:center; }
     .truco-content.active { display:block; }
-    .video-wrapper { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:800px; margin:2rem auto; background:#000; }
-    .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; }
+    .video-wrapper {
+      position:relative; padding-bottom:56.25%; height:0; overflow:hidden;
+      max-width:800px; margin:2rem auto; background:#000;
+    }
+    .video-wrapper iframe {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+    }
     .truco-desc { max-width:700px; margin:1rem auto; font-size:1.1rem; }
 
-    /* Nueva sección Contacto */
-    #contacto { padding:4rem 5%; background:#000; text-align:center; border-top:2px solid #333; }
-    .contact-btn { 
-      display: inline-block; 
-      background:#25D366; /* verde WhatsApp */ 
-      color:white; 
-      padding:1.2rem 3rem; 
-      border-radius:50px; 
-      text-decoration:none; 
-      font-weight:bold; 
-      font-size:1.3rem; 
-      margin:1.5rem 0; 
-      transition:all 0.3s; 
-      box-shadow:0 8px 20px rgba(37,213,102,0.4);
+    #contacto {
+      padding:4rem 5%; background:#000; text-align:center;
+      border-top:2px solid #333;
     }
-    .contact-btn:hover { background:#20b858; transform:translateY(-5px); box-shadow:0 15px 30px rgba(37,213,102,0.5); }
+    .contact-btn {
+      display: inline-block; background:#25D366; color:white;
+      padding:1.2rem 3rem; border-radius:50px; text-decoration:none;
+      font-weight:bold; font-size:1.3rem; margin:1.5rem 0;
+      transition:all 0.3s; box-shadow:0 8px 20px rgba(37,213,102,0.4);
+    }
+    .contact-btn:hover {
+      background:#20b858; transform:translateY(-5px);
+      box-shadow:0 15px 30px rgba(37,213,102,0.5);
+    }
+    footer {
+      background:#000; padding:2rem; text-align:center;
+      border-top:2px solid #333;
+    }
 
-    footer { background:#000; padding:2rem; text-align:center; border-top:2px solid #333; }
-    @media (max-width:600px) { .glitch {font-size:2.2rem;} .hero h2 {font-size:2.6rem;} nav a {margin:0 0.8rem; font-size:0.95rem;} .contact-btn {padding:1rem 2rem; font-size:1.1rem;} }
+    @media (max-width:600px) {
+      .glitch {font-size:2.2rem;}
+      .hero h2 {font-size:2.6rem;}
+      nav a {margin:0 0.8rem; font-size:0.95rem;}
+    }
   </style>
 </head>
 <body>
 
+  <!-- Loader -->
   <div id="loader">
     <div class="skate-wheel"></div>
   </div>
 
   <header>
-    <h1 class="glitch" data-text="Fingerboards Formosa">Fingerboards Formosa</h1>
-    <p>La comunidad más callejera del norte 🇦🇷</p>
+    <h1 class="glitch" data-text="APES">APES</h1>
+    <p>Fingerboards Formosa • La escena más callejera del norte 🇦🇷</p>
     <nav>
       <a href="#inicio">Inicio</a>
       <a href="#productos">Tablas</a>
@@ -142,8 +180,8 @@
 
   <section class="hero" id="inicio">
     <div class="hero-content">
-      <h2>¡Fingerboard al palo!</h2>
-      <p>Tablas pro, repuestos, stickers y la mejor onda fingerstyle de Formosa y alrededores.</p>
+      <h2>APES Fingerboards</h2>
+      <p>Tablas pro, completes, repuestos y la mejor onda fingerstyle de Formosa.</p>
       <a href="#productos" class="btn">Ver Tablas</a>
     </div>
   </section>
@@ -178,7 +216,7 @@
     </div>
 
     <section id="trucos">
-      <h3>Aprendé Trucos con la Banda de Formosa</h3>
+      <h3>Aprendé Trucos con APES</h3>
       <p style="text-align:center; margin-bottom:2rem;">Elegí el truco que querés aprender y mirá el tutorial paso a paso</p>
       <div class="trucos-menu">
         <button data-truco="ollie">Ollie</button>
@@ -192,7 +230,7 @@
         </div>
         <div class="truco-desc">
           <h4>Cómo Hacer un Ollie en Fingerboard</h4>
-          <p>Tutorial básico de Burbuja Psicopata: posición, pop y aterrizaje limpio. ¡Dale play!</p>
+          <p>Tutorial básico de Burbuja Psicopata: posición, pop y aterrizaje limpio.</p>
         </div>
       </div>
       <div id="kickflip" class="truco-content">
@@ -215,7 +253,7 @@
       </div>
       <div id="otro" class="truco-content">
         <h4>Otro truco</h4>
-        <p>Decime cuál querés (pop shuvit, impossible...) y lo agregamos.</p>
+        <p>Decime cuál querés y lo agregamos.</p>
       </div>
     </section>
   </main>
@@ -223,26 +261,34 @@
   <!-- Sección Contacto -->
   <section id="contacto">
     <h3>Contacto</h3>
-    <p style="font-size:1.3rem; margin:1rem 0;">¿Querés info de tablas, armar un custom o comprar? Escribime directo por WhatsApp. ¡Te respondo rápido!</p>
-    <a href="https://wa.me/543705202418?text=Hola!%20Vi%20tu%20p%C3%A1gina%20de%20Fingerboards%20Formosa%20y%20quiero%20info%20/%20comprar..." class="contact-btn" target="_blank">
+    <p style="font-size:1.3rem; margin:1.5rem 0;">¿Querés info, precios o armar tu setup? Escribime por WhatsApp.</p>
+    <a href="https://wa.me/543705202418?text=Hola!%20Vi%20la%20p%C3%A1gina%20de%20APES%20y%20quiero%20info%20de%20tablas"
+       class="contact-btn" target="_blank">
       Escribime por WhatsApp
     </a>
-    <p style="margin-top:2rem; color:#aaa;">Número: +54 3705 202418</p>
+    <p style="margin-top:2rem; color:#aaa;">WhatsApp: +54 3705 202418</p>
+   
+    <p style="margin-top:2.5rem;">
+      <strong>Instagram:</strong><br>
+      <a href="https://www.instagram.com/apes6753" target="_blank" style="color:#ffcc00; text-decoration:none;">
+        @apes6753
+      </a>
+    </p>
   </section>
 
   <footer>
-    <p>© 2026 Fingerboards Formosa • Hecho con ❤️ para la escena finger</p>
-    <p>IG: @fingerboardsformosa • WhatsApp: +54 3705 202418</p>
+    <p>© 2026 APES Fingerboards Formosa • Hecho con ❤️ para la escena finger</p>
+    <p>IG: <a href="https://www.instagram.com/apes6753" target="_blank" style="color:#ffcc00;">@apes6753</a> • WhatsApp: +54 3705 202418</p>
   </footer>
 
   <script>
-    // Loader: 2 segundos fijos
+    // Loader 2 segundos
     setTimeout(() => {
       document.getElementById('loader').classList.add('hidden');
       document.body.classList.add('loaded');
     }, 2000);
 
-    // Tabs trucos
+    // Tabs de trucos
     const buttons = document.querySelectorAll('.trucos-menu button');
     const contents = document.querySelectorAll('.truco-content');
     buttons.forEach(button => {
@@ -255,6 +301,5 @@
       });
     });
   </script>
-
 </body>
 </html>
